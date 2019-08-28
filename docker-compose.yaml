@@ -1,0 +1,25 @@
+version: "3.6"
+
+services:
+  api:
+    networks:
+      - backend
+    image: deep-thoughts:latest
+    ports:
+      - 8080:8080
+    volumes:
+      - ./:/usr/src/app
+  postgres:
+    networks:
+      - backend
+    ports:
+      - 5432:5432
+    image: postgres:latest
+    volumes:
+      - db_data:/var/lib/postgres
+
+volumes:
+  db_data:
+
+networks:
+  backend:
