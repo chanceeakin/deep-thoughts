@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	app "deep-thoughts/server/app"
-	db "deep-thoughts/server/db"
+	app "github.com/chanceeakin/deep-thoughts/server/app"
+	db "github.com/chanceeakin/deep-thoughts/server/db"
 )
 
 const (

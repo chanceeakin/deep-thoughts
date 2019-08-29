@@ -1,11 +1,11 @@
 package controller
 
 import (
-	common "deep-thoughts/server/common"
-	message "deep-thoughts/server/models/message"
-	response "deep-thoughts/server/response"
-	routes "deep-thoughts/server/routes"
 	"encoding/json"
+	common "github.com/chanceeakin/deep-thoughts/server/common"
+	thought "github.com/chanceeakin/deep-thoughts/server/models/thought"
+	response "github.com/chanceeakin/deep-thoughts/server/response"
+	routes "github.com/chanceeakin/deep-thoughts/server/routes"
 	"io"
 	// post gres
 	_ "github.com/lib/pq"
@@ -15,63 +15,57 @@ import (
 	"net/http"
 )
 
-// ThoughtRoutes() is the declaration for all routes
+// ThoughtRoutes is the declaration for all routes
 func ThoughtRoutes() []routes.Route {
-	messageRoutes := make([]routes.Route, 4)
-	messageRoutes = append(messageRoutes, routes.Route{
-		Name:        "Messages",
-		Path:        "/messages",
-		HandlerFunc: getMessages,
+	thoughtRoutes := make([]routes.Route, 3)
+	thoughtRoutes = append(thoughtRoutes, routes.Route{
+		Name:        "Thoughts",
+		Path:        "/thoughts",
+		HandlerFunc: getThoughts,
 		Method:      "GET",
 	},
 		routes.Route{
-			Name:        "Message",
-			Path:        "/message",
-			HandlerFunc: getMessage,
+			Name:        "Thought",
+			Path:        "/thought",
+			HandlerFunc: getThought,
 			Method:      "GET",
 		},
 		routes.Route{
-			Name:        "Post Message",
-			Path:        "/message",
-			HandlerFunc: postMessage,
+			Name:        "Post Thought",
+			Path:        "/thought",
+			HandlerFunc: postThought,
 			Method:      "POST",
-		},
-		routes.Route{
-			Name:        "Messages by Game",
-			Path:        "/messages/game",
-			HandlerFunc: messageByGameHandler,
-			Method:      "GET",
 		})
-	return messageRoutes
+	return thoughtRoutes
 }
 
-func getMessages(w http.ResponseWriter, r *http.Request) {
+func getThoughts(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, `Not Found`, http.StatusNotFound)
 		return
 	}
-	messagesArr := message.Messages{}
+	thoughtsArr := thought.Thoughts{}
 
-	err := message.QueryMessages(&messagesArr)
+	err := thought.QueryThoughts(&thoughtsArr)
 	if err != nil {
 		log.Print(err)
 		http.Error(w, `Internal Error`, http.StatusInternalServerError)
 		return
 	}
 
-	response.SendJSON(w, messagesArr)
+	response.SendJSON(w, thoughtsArr)
 }
 
-// PostMessage inserts a message to the database
-func postMessage(w http.ResponseWriter, r *http.Request) {
+func postThought(w http.ResponseWriter, r *http.Request) {
 	var err error
-	var messageInput message.Input
+	var thoughtInput thought.Input
 	var out common.ID
 	v := validator.New()
 	decoder := json.NewDecoder(r.Body)
-	err = decoder.Decode(&messageInput)
+
+	err = decoder.Decode(&thoughtInput)
 	defer r.Body.Close()
-	err = v.Struct(messageInput)
+	err = v.Struct(thoughtInput)
 
 	switch {
 	case err == io.EOF:
@@ -80,7 +74,7 @@ func postMessage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	out, err = message.PostMessageQuery(&messageInput)
+	out, err = thought.PostThought(&thoughtInput)
 	if err != nil {
 		response.SendError(w, err, http.StatusInternalServerError)
 		return
@@ -88,7 +82,7 @@ func postMessage(w http.ResponseWriter, r *http.Request) {
 	response.SendJSON(w, out)
 }
 
-func getMessage(w http.ResponseWriter, r *http.Request) {
+func getThought(w http.ResponseWriter, r *http.Request) {
 	var input common.ID
 	decoder := json.NewDecoder(r.Body)
 	err := decoder.Decode(&input)
@@ -98,38 +92,11 @@ func getMessage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	val, err1 := message.QueryMessage(&input)
+	val, err1 := thought.QueryThought(&input)
 	if err1 != nil {
 		response.SendError(w, err1, http.StatusInternalServerError)
 		return
 	}
 
 	response.SendJSON(w, val)
-}
-
-//MessageByGameHandler handles returning messages per game
-func messageByGameHandler(w http.ResponseWriter, r *http.Request) {
-	var input common.ID
-	v := validator.New()
-	decoder := json.NewDecoder(r.Body)
-	err := decoder.Decode(&input)
-
-	defer r.Body.Close()
-	err = v.Struct(input)
-
-	switch {
-	case err == io.EOF:
-	case err != nil:
-		response.SendError(w, err, http.StatusBadRequest)
-		return
-	}
-
-	messageArr, err := message.QueryMessagesByGame(&input)
-	if err != nil {
-		response.SendError(w, err, http.StatusInternalServerError)
-		return
-	}
-
-	response.SendJSON(w, messageArr)
-
 }
