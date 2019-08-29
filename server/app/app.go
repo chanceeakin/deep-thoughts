@@ -4,9 +4,9 @@ import (
 	"log"
 	"net/http"
 
-	controllers "github.com/chanceeakin/deep-thoughts/server/controllers"
-	db "github.com/chanceeakin/deep-thoughts/server/db"
-	routes "github.com/chanceeakin/deep-thoughts/server/routes"
+	controllers "deep-thoughts/server/controllers"
+	db "deep-thoughts/server/db"
+	routes "deep-thoughts/server/routes"
 	"github.com/urfave/negroni"
 )
 

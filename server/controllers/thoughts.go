@@ -1,11 +1,11 @@
 package controller
 
 import (
+	common "deep-thoughts/server/common"
+	message "deep-thoughts/server/models/message"
+	response "deep-thoughts/server/response"
+	routes "deep-thoughts/server/routes"
 	"encoding/json"
-	common "football-squares/server/common"
-	message "football-squares/server/models/message"
-	response "football-squares/server/response"
-	routes "football-squares/server/routes"
 	"io"
 	// post gres
 	_ "github.com/lib/pq"
@@ -15,8 +15,8 @@ import (
 	"net/http"
 )
 
-// MessageRoutes is the declaration for all routes
-func MessageRoutes() []routes.Route {
+// ThoughtRoutes() is the declaration for all routes
+func ThoughtRoutes() []routes.Route {
 	messageRoutes := make([]routes.Route, 4)
 	messageRoutes = append(messageRoutes, routes.Route{
 		Name:        "Messages",

@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	app "football-squares/server/app"
-	db "football-squares/server/db"
+	app "deep-thoughts/server/app"
+	db "deep-thoughts/server/db"
 )
 
 const (
@@ -14,12 +14,12 @@ const (
 	dbPort   = 5432
 	user     = "postgres"
 	password = "password"
-	dbname   = "football_square"
+	dbname   = "deep_thoughts"
 )
 
 func main() {
 
-	log.Println("Starting football services app")
+	log.Println("Starting deep-thoughts app")
 	initData := db.InitData{Host: host, Port: port, User: user, Password: password, Dbname: dbname, DbHost: dbHost, DbPort: dbPort}
 
 	app.Run(&initData)

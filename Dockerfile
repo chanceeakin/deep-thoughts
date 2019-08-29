@@ -1,6 +1,6 @@
 FROM golang:1.12
 
-WORKDIR /usr/src/app
+WORKDIR /go/src/deep-thoughts
 
 ENV GO111MODULE=on
 

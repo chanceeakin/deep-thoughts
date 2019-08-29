@@ -1,8 +1,8 @@
 package message
 
 import (
-	common "football-squares/server/common"
-	db "football-squares/server/db"
+	common "deep-thoughts/server/common"
+	db "deep-thoughts/server/db"
 	"log"
 	"time"
 )
