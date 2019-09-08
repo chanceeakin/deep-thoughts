@@ -17,7 +17,7 @@ import (
 
 // ThoughtRoutes is the declaration for all routes
 func ThoughtRoutes() []routes.Route {
-	thoughtRoutes := make([]routes.Route, 3)
+	thoughtRoutes := make([]routes.Route, 5)
 	thoughtRoutes = append(thoughtRoutes, routes.Route{
 		Name:        "Thoughts",
 		Path:        "/thoughts",
@@ -35,6 +35,24 @@ func ThoughtRoutes() []routes.Route {
 			Path:        "/thought",
 			HandlerFunc: postThought,
 			Method:      "POST",
+		},
+		routes.Route{
+			Name:        "Delete Thought",
+			Path:        "/thought",
+			HandlerFunc: deleteThought,
+			Method:      "DELETE",
+		},
+		routes.Route{
+			Name:        "Update Thought",
+			Path:        "/thought",
+			HandlerFunc: updateThought,
+			Method:      "PUT",
+		},
+		routes.Route{
+			Name:        "Random Thought",
+			Path:        "/random",
+			HandlerFunc: randomThought,
+			Method:      "GET",
 		})
 	return thoughtRoutes
 }
@@ -95,6 +113,58 @@ func getThought(w http.ResponseWriter, r *http.Request) {
 	val, err1 := thought.QueryThought(&input)
 	if err1 != nil {
 		response.SendError(w, err1, http.StatusInternalServerError)
+		return
+	}
+
+	response.SendJSON(w, val)
+}
+
+func deleteThought(w http.ResponseWriter, r *http.Request) {
+	var input common.ID
+	decoder := json.NewDecoder(r.Body)
+	err := decoder.Decode(&input)
+	defer r.Body.Close()
+	if err != nil {
+		response.SendError(w, err, http.StatusBadRequest)
+		return
+	}
+
+	val, err1 := thought.DeleteThought(&input)
+	if err1 != nil {
+		response.SendError(w, err1, http.StatusInternalServerError)
+		return
+	}
+	response.SendJSON(w, val)
+}
+
+func updateThought(w http.ResponseWriter, r *http.Request) {
+	var input thought.PutInput
+	decoder := json.NewDecoder(r.Body)
+	err := decoder.Decode(&input)
+	defer r.Body.Close()
+	if err != nil {
+		response.SendError(w, err, http.StatusBadRequest)
+		return
+	}
+
+	val, err1 := thought.PutOneThought(&input)
+	if err1 != nil {
+		response.SendError(w, err1, http.StatusInternalServerError)
+		return
+	}
+	response.SendJSON(w, val)
+}
+
+func randomThought(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, `Not Found`, http.StatusNotFound)
+		return
+	}
+
+	val, err := thought.QueryRandomThought()
+	if err != nil {
+		log.Print(err)
+		http.Error(w, `Internal Error`, http.StatusInternalServerError)
 		return
 	}
 

@@ -12,7 +12,7 @@ func SendJSON(w http.ResponseWriter, i interface{}) {
 		http.Error(w, "JSON Error: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
-
+	enableCors(&w)
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(js)
 }
