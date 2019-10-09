@@ -50,8 +50,12 @@ const CardComponent = ({ deepThought, onClick }) => {
       }}
     >
       <Card style={{ opacity: opacity.interpolate(o => 1 - o), transform }}>
-        <DeepThought>{deepThought && deepThought.deep_thought}</DeepThought>
-        <Author> - {deepThought && deepThought.author}</Author>
+        {deepThought ? (
+          <>
+            <DeepThought>{deepThought.deep_thought}</DeepThought>
+            <Author> - {deepThought.author}</Author>
+          </>
+        ) : null}
       </Card>
       <Card
         style={{
@@ -59,8 +63,12 @@ const CardComponent = ({ deepThought, onClick }) => {
           transform: transform.interpolate(t => `${t} rotateX(180deg)`)
         }}
       >
-        <DeepThought>{deepThought && deepThought.deep_thought}</DeepThought>
-        <Author> - {deepThought && deepThought.author}</Author>
+        {deepThought ? (
+          <>
+            <DeepThought>{deepThought.deep_thought}</DeepThought>
+            <Author> - {deepThought.author}</Author>
+          </>
+        ) : null}
       </Card>
     </Root>
   );

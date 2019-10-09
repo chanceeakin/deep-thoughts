@@ -3,7 +3,7 @@ import React from "react";
 import { css, keyframes } from "@emotion/core";
 import styled from "@emotion/styled";
 import Card from "./Card";
-import EditButton from "./EditButton";
+import Modal from "./Modal";
 import { getRandomThought } from "../api/deepThoughts";
 
 const gradient = keyframes`
@@ -58,10 +58,7 @@ async function getData(setDeepThought) {
 }
 
 const Container = () => {
-  const [deepThought, setDeepThought] = React.useState({
-    deep_thought: "",
-    author: ""
-  });
+  const [deepThought, setDeepThought] = React.useState({});
   React.useEffect(() => {
     getData(setDeepThought);
   }, []);
@@ -75,7 +72,7 @@ const Container = () => {
           deepThought={deepThought}
         />
       </Header>
-      <EditButton deepThought={deepThought} />
+      <Modal deepThought={deepThought} />
     </Root>
   );
 };
