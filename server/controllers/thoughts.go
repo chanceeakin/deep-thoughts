@@ -44,9 +44,9 @@ func ThoughtRoutes() []routes.Route {
 		},
 		routes.Route{
 			Name:        "Update Thought",
-			Path:        "/thought",
+			Path:        "/update",
 			HandlerFunc: updateThought,
-			Method:      "PUT",
+			Method:      "POST",
 		},
 		routes.Route{
 			Name:        "Random Thought",

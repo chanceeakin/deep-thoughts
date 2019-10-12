@@ -1,0 +1,3 @@
+- delete a record button
+- timer to auto circulate the thoughts
+- make CI/CD great again

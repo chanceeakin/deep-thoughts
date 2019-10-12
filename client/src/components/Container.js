@@ -3,7 +3,7 @@ import React from "react";
 import { css, keyframes } from "@emotion/core";
 import styled from "@emotion/styled";
 import Card from "./Card";
-import Modal from "./Modal";
+import { EditModal, AddModal } from "./modal";
 import { getRandomThought } from "../api/deepThoughts";
 
 const gradient = keyframes`
@@ -63,16 +63,18 @@ const Container = () => {
     getData(setDeepThought);
   }, []);
 
+  const handleClick = () => {
+    getData(setDeepThought);
+  };
+
   return (
     <Root>
       <Header>
         <Title>Deep Thoughts</Title>
-        <Card
-          onClick={() => getData(setDeepThought)}
-          deepThought={deepThought}
-        />
+        <Card onClick={handleClick} deepThought={deepThought} />
       </Header>
-      <Modal deepThought={deepThought} />
+      <EditModal deepThought={deepThought} setDeepThought={setDeepThought} />
+      <AddModal deepThought={deepThought} />
     </Root>
   );
 };
