@@ -12,9 +12,10 @@ const rootStyles = ({ type }) => css`
   margin: 0.5rem 1rem;
   background: transparent;
   color: ${type === "dark" ? "#030303" : "#fafafa"};
-  border: 2px solid #fafafa;
+  border: 2px solid ${type === "dark" ? "#030303" : "#fafafa"};
   cursor: pointer;
   : hover {
+    border: ${type === "dark" ? "2px solid #595959" : null};
     background: ${type === "dark" ? "#595959" : "#fafafa"};
     color: ${type === "dark" ? "#fafafa" : "#030303"};
   }
@@ -35,6 +36,18 @@ const setSide = ({ type }) => {
         position: "relative",
         top: null
       };
+    case "delete":
+      return {
+        color: "#e73c7e",
+        border: "2px solid #e73c7e",
+        position: "relative",
+        top: null,
+        ":hover": {
+          background: "#e73c7e",
+          color: "#fafafa"
+        }
+      };
+
     default:
       return null;
   }

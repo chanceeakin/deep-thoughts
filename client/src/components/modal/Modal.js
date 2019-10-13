@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { keyframes } from "@emotion/core";
 import Title from "./Title";
 import Button from "./Button";
-import CloseButton from "./CloseButton";
+import IconButton from "./IconButton";
 
 const inputBackground = `rgba(57, 63, 84, 0.8)`;
 const textInactive = `#7881A1`;
@@ -28,6 +28,20 @@ const Modal = styled.div`
   margin: auto;
   color: black;
   z-index: 1000;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin: 1rem;
+  width: 100%;
+`;
+
+const DeleteButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin: 1rem;
+  width: 100%;
 `;
 
 const Label = styled.label`
@@ -106,41 +120,71 @@ const ModalComponent = ({
   title,
   deepThought,
   author,
-  type
+  type,
+  handleDelete
 }) => {
+  const [isDeleting, setDelete] = React.useState(false);
   return (
     <Modal>
-      <CloseButton onClick={handleClose} />
-      <Title type={type} />
-      <Label for="title">Title</Label>
-      <InputWrapper>
-        <Input
-          onChange={handleTitleChange}
-          name="title"
-          placeholder="Title"
-          value={title}
-        />
-      </InputWrapper>
-      <Label for="deep_thought">Deep Thought</Label>
-      <InputWrapper>
-        <TextArea
-          onChange={handleDeepThoughtChange}
-          value={deepThought}
-          name="deep_thought"
-          rows="2"
-          placeholder="Deep Thought"
-        />
-      </InputWrapper>
-      <Label for="author">Author</Label>
-      <InputWrapper>
-        <Input
-          onChange={handleAuthorChange}
-          placeholder="Author"
-          name="authro"
-          value={author}
-        />
-      </InputWrapper>
-      <Button onClick={handleSubmit} title="Submit" type="dark" />
+      <ButtonContainer>
+        {type === "edit" ? (
+          <IconButton
+            type="delete"
+            onClick={() => setDelete(state => !state)}
+          />
+        ) : null}
+        <IconButton type="close" onClick={handleClose} />
+      </ButtonContainer>
+      {type === "edit" && isDeleting ? (
+        <DeleteButtonContainer>
+          <Button
+            type="delete"
+            title="Delete"
+            onClick={() => {
+              setDelete(state => !state);
+              handleDelete();
+            }}
+          />
+          <Button
+            type="dark"
+            title="Cancel"
+            onClick={() => setDelete(state => !state)}
+          />
+        </DeleteButtonContainer>
+      ) : (
+        <>
+          <Title type={type} />
+          <Label for="title">Title</Label>
+          <InputWrapper>
+            <Input
+              onChange={handleTitleChange}
+              name="title"
+              placeholder="Title"
+              value={title}
+            />
+          </InputWrapper>
+          <Label for="deep_thought">Deep Thought</Label>
+          <InputWrapper>
+            <TextArea
+              onChange={handleDeepThoughtChange}
+              value={deepThought}
+              name="deep_thought"
+              rows="2"
+              placeholder="Deep Thought"
+            />
+          </InputWrapper>
+          <Label for="author">Author</Label>
+          <InputWrapper>
+            <Input
+              onChange={handleAuthorChange}
+              placeholder="Author"
+              name="authro"
+              value={author}
+            />
+          </InputWrapper>
+          <Button onClick={handleSubmit} title="Submit" type="dark" />
+        </>
+      )}
     </Modal>
   );
 };

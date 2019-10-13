@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/runtime": "7.6.3",
     "@emotion/core": "10.0.16",
     "@emotion/styled": "10.0.15",
     "formik": "1.5.8",

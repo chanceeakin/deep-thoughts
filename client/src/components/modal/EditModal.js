@@ -4,7 +4,7 @@ import { useTransition } from "react-spring";
 import ModalButton from "./Button";
 import Modal from "./Modal";
 import ModalBackground from "./ModalBackground";
-import { putThought } from "../../api/deepThoughts";
+import { putThought, deleteThought } from "../../api/deepThoughts";
 
 const TYPES = {
   UPDATE_TITLE: "UPDATE_TITLE",
@@ -55,7 +55,7 @@ function reducer(state, action) {
   }
 }
 
-const ModalComponent = ({ deepThought, setDeepThought }) => {
+const ModalComponent = ({ deepThought, setDeepThought, getDeepThought }) => {
   const [isOpen, set] = React.useState(false);
   const [state, dispatch] = React.useReducer(
     reducer,
@@ -131,6 +131,18 @@ const ModalComponent = ({ deepThought, setDeepThought }) => {
     });
   };
 
+  const handleDelete = async () => {
+    try {
+      await deleteThought({
+        id: state.id
+      });
+      handleClose();
+      getDeepThought();
+    } catch (e) {
+      throw e;
+    }
+  };
+
   return (
     <>
       <ModalButton onClick={handleOpen} title="Edit Me" type="right" />
@@ -143,6 +155,7 @@ const ModalComponent = ({ deepThought, setDeepThought }) => {
                 handleClose={handleClose}
                 handleSubmit={handleSubmit}
                 handleAuthorChange={handleAuthorChange}
+                handleDelete={handleDelete}
                 handleDeepThoughtChange={handleDeepThoughtChange}
                 title={state.title}
                 deepThought={state.deep_thought}

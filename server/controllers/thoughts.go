@@ -38,9 +38,9 @@ func ThoughtRoutes() []routes.Route {
 		},
 		routes.Route{
 			Name:        "Delete Thought",
-			Path:        "/thought",
+			Path:        "/delete",
 			HandlerFunc: deleteThought,
-			Method:      "DELETE",
+			Method:      "POST",
 		},
 		routes.Route{
 			Name:        "Update Thought",

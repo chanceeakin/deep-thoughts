@@ -8,8 +8,7 @@ import { getRandomThought } from "../api/deepThoughts";
 
 const gradient = keyframes`
     0% {
-      background-position: 0% 50%;
-    }
+      background-position: 0% 50%; }
     50% {
       background-position: 100% 50%;
     }
@@ -73,7 +72,11 @@ const Container = () => {
         <Title>Deep Thoughts</Title>
         <Card onClick={handleClick} deepThought={deepThought} />
       </Header>
-      <EditModal deepThought={deepThought} setDeepThought={setDeepThought} />
+      <EditModal
+        deepThought={deepThought}
+        getDeepThought={handleClick}
+        setDeepThought={setDeepThought}
+      />
       <AddModal deepThought={deepThought} />
     </Root>
   );

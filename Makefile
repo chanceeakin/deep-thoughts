@@ -29,3 +29,9 @@ init-db:
 
 drop-db:
 	psql -h localhost -p 5432 -U postgres -W -c "drop database deep_thoughts;"
+
+build-client:
+	docker build -t deepthought-client .
+
+run-client:
+	docker run -v ${PWD}:/app -v /app/node_modules -p 3001:3000 --rm deepthought:client
